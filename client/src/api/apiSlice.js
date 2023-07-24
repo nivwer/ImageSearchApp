@@ -6,10 +6,10 @@ export const apiSlice = createApi({
     baseUrl: "http://localhost:8000/images",
   }),
   endpoints: (builder) => ({
-    getHello: builder.query({
-      query: () => "/hello",
+    getImagesResults: builder.query({
+      query: (params) => `/api/v1/search/?query=${params.query}&page=${params.page}`,
     }),
   }),
 });
 
-export const { useGetHelloQuery } = apiSlice;
+export const { useGetImagesResultsQuery } = apiSlice;
