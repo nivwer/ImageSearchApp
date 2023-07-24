@@ -1,21 +1,34 @@
-import { useGetHelloQuery } from "../../api/apiSlice";
+import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+
 
 function SearchForm() {
-  const { data, isError, isLoading, error } = useGetHelloQuery();
+  const [searchData, setSearchData] = useState('');
 
-  if (isLoading) return <div>Loading..</div>;
-  else if (isError) return <div>Error: {error.message}</div>;
-  const res = data.res
+  const navigate = useNavigate()
 
+  const handleChange = (e) => {
+    setSearchData(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    // prevent refresh page
+    e.preventDefault();
+
+    navigate(`/home/results/?query=${searchData}&page=0`)
+
+  };
+  
   return (
-    <ul>
-      {res.map((re) => (
-        <li>
-          <h3>{re.res}</h3>
-          <h3>{re.pais}</h3>
-        </li>
-      ))}
-    </ul>
+    <form onSubmit={handleSubmit}>
+      <input
+        name="search"
+        type="text"
+        placeholder="Search"
+        onChange={handleChange}
+      />
+      <button>Search</button>
+    </form>
   );
 }
 
