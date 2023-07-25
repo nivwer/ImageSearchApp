@@ -1,11 +1,12 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Paper, InputBase, IconButton } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
+export function SearchForm() {
+  const [searchData, setSearchData] = useState("");
 
-function SearchForm() {
-  const [searchData, setSearchData] = useState('');
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setSearchData(e.target.value);
@@ -15,20 +16,38 @@ function SearchForm() {
     // prevent refresh page
     e.preventDefault();
 
-    navigate(`/home/results/?query=${searchData}&page=0`)
-
+    navigate(`/home/results/?query=${searchData}&page=1`);
   };
-  
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        name="search"
-        type="text"
+    <Paper
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        p: "2px 10px 2px 20px",
+        display: "flex",
+        alignItems: "center",
+        width: "auto",
+        m: "auto",
+        maxWidth: "550px",
+      }}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
         placeholder="Search"
         onChange={handleChange}
+        inputProps={{ "aria-label": "search" }}
       />
-      <button>Search</button>
-    </form>
+
+      <IconButton
+        onClick={handleSubmit}
+        type="button"
+        sx={{ p: "5px" }}
+        aria-label="search"
+      >
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   );
 }
 
