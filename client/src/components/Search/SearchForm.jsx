@@ -16,7 +16,11 @@ export function SearchForm() {
     // prevent refresh page
     e.preventDefault();
 
-    navigate(`/home/results/?query=${searchData}&page=1`);
+    if (searchData) {
+      navigate(`/home/results/?query=${searchData}&page=1`);
+    } else {
+      navigate(`/home`);
+    }
   };
 
   return (
@@ -30,6 +34,8 @@ export function SearchForm() {
         width: "auto",
         m: "auto",
         maxWidth: "550px",
+        border: '1px solid #373737',
+        borderRadius: '100px'
       }}
     >
       <InputBase
@@ -42,7 +48,7 @@ export function SearchForm() {
       <IconButton
         onClick={handleSubmit}
         type="button"
-        sx={{ p: "5px" }}
+        sx={{ p: "5px", color: '#373737' }}
         aria-label="search"
       >
         <SearchIcon />

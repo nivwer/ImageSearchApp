@@ -14,14 +14,12 @@ export function Navigation() {
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar component="nav" color="primary">
-          <Container>
-            <Toolbar>
+            <Toolbar sx={{m: '0 5%'}}>
               <Typography variant="h6">
                 <NavLink to="/">ISearch</NavLink>
               </Typography>
               <Box sx={{ flexGrow: 1, m: '0 100px' }}>
                 <SearchForm />
-
               </Box>
               <Box sx={{ display: { xs: "none", md: "block" } }}>
                 <Button>
@@ -32,7 +30,12 @@ export function Navigation() {
                 </Button>
               </Box>
             </Toolbar>
-          </Container>
+        </AppBar>
+      </Box>
+      <Box>
+        <AppBar position="static" >
+          <Toolbar>
+          </Toolbar>
         </AppBar>
       </Box>
     </>
