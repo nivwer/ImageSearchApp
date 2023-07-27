@@ -1,34 +1,39 @@
 import os
 from django.http import JsonResponse, HttpResponse
 import requests
-from pymongo import MongoClient, errors
+from pymongo import MongoClient, errors, DESCENDING
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Create your views here.
 
-
-# Function to log search queries in the database
-def log_search(query):
+# Connection to MongoDB
+def connection_mongodb():
     MONGO_URI = os.getenv('MONGO_URI')
     try:
         client = MongoClient(MONGO_URI)
-        db = client['SearchArchive']
-        collection = db['searches']
-
-        result = collection.find_one({'query': query})
-
-        if result:
-            collection.update_one(result, {'$inc': {'total': 1}})
-        else:
-            collection.insert_one({'query': query, 'total': 1})
+        return client
     except errors.ConnectionError as e:
         # Handle MongoDB connection error
         print(f'MongoDB connection error: {e}')
     except errors.ServerSelectionTimeoutError as e:
         # Handle MongoDB server selection timeout error
         print(f'MongoDB server selection timeout error: {e}')
+
+
+# Function to log search queries in the database
+def log_search(query):
+    try:
+        client = connection_mongodb()
+        db = client['SearchArchive']
+        collection = db['searches']
+
+        result = collection.find_one({'query': query})
+
+        if result:
+            collection.update_one(result, {'$inc': {'count': 1}})
+        else:
+            collection.insert_one({'query': query, 'count': 1})
     except errors.WriteError as e:
         # Handle MongoDB write error
         print(f'MongoDB write error: {e}')
@@ -36,6 +41,8 @@ def log_search(query):
         # Handle other general exceptions
         print(f'Error: {e}')
 
+
+# Create your views here.
 
 # Function for handling search queries and image search results from Unsplash API.
 def search_results(request):
@@ -66,6 +73,22 @@ def search_results(request):
     except requests.exceptions.RequestException as e:
         # Handle general request exceptions by returning an error JSON response
         return JsonResponse({'error': f'Request exception: {e}'})
+
+
+# Function to get the popular searches
+def get_popular_searches(request):
+    limit = request.GET.get('limit', '5')
+    try:
+        client = connection_mongodb()
+        db = client['SearchArchive']
+        collection = db['searches']
+
+        popular_searches = collection.find().sort('count', DESCENDING).limit(int(limit))
+
+        return list(popular_searches)
+    except Exception as e:
+        # Handle other general exceptions
+        print(f'Error: {e}')
 
 
 def hello(request):
