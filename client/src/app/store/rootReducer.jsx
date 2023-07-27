@@ -1,12 +1,12 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import imageSearchReducer from '../../features/searchResults/imageSearchSlice'
+import imagesDataReducer from '../../features/imagesData/imagesDataSlice'
 import { apiSlice } from '../../api/apiSlice'
 
 export const store = configureStore({
      reducer: {
         api: apiSlice.reducer,
-        images: imageSearchReducer,
+        imagesData: imagesDataReducer,
      },
      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 })
