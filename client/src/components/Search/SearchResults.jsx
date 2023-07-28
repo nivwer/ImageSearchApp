@@ -8,7 +8,7 @@ function SearchResults() {
   if (results) {
     return (
       <>
-        <Box sx={{minHeight: '100vh'}}>
+        <Box sx={{minHeight: '80vh'}}>
         <ImageList variant="masonry" cols={5} gap={8}>
           {results.map((r) => (
             <ImageListItem key={r.id}>
