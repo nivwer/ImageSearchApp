@@ -1,6 +1,9 @@
 import os
-from django.http import JsonResponse, HttpResponse
 import requests
+import json
+from django.http import JsonResponse, HttpResponse
+from datetime import datetime
+from bson import json_util
 from pymongo import MongoClient, errors, DESCENDING
 from dotenv import load_dotenv
 
@@ -8,23 +11,29 @@ load_dotenv()
 
 
 # Connection to MongoDB
-def connection_mongodb():
+def connection_mongodb(origin):
     MONGO_URI = os.getenv('MONGO_URI')
+    dtn = datetime.now().strftime("[%d/%b/%Y %H:%M:%S]")
     try:
         client = MongoClient(MONGO_URI)
+        print(f'{dtn} "MongoDB connection successful ({origin})"')
         return client
     except errors.ConnectionError as e:
         # Handle MongoDB connection error
-        print(f'MongoDB connection error: {e}')
+        print(f'{dtn} MongoDB connection error: {e}')
     except errors.ServerSelectionTimeoutError as e:
         # Handle MongoDB server selection timeout error
-        print(f'MongoDB server selection timeout error: {e}')
+        print(f'{dtn} MongoDB server selection timeout error: {e}')
+
 
 
 # Function to log search queries in the database
 def log_search(query):
+    if not query:
+        return JsonResponse({'error': 'Invalid query'})
+
     try:
-        client = connection_mongodb()
+        client = connection_mongodb('views.log_search')
         db = client['SearchArchive']
         collection = db['searches']
 
@@ -34,6 +43,8 @@ def log_search(query):
             collection.update_one(result, {'$inc': {'count': 1}})
         else:
             collection.insert_one({'query': query, 'count': 1})
+
+        return JsonResponse({'message': 'Search query logged successfully'})
     except errors.WriteError as e:
         # Handle MongoDB write error
         print(f'MongoDB write error: {e}')
@@ -47,14 +58,14 @@ def log_search(query):
 # Function for handling search queries and image search results from Unsplash API.
 def search_results(request):
     API_KEY = os.getenv('API_KEY_UNSPLASH')
-    query = request.GET.get('query', '').stript()
+    query = ' '.join(request.GET.get('query', '').split()).lower()
     page = request.GET.get('page', '')
+
 
     # Invalid input
     if not query or not page.isdigit():
         return JsonResponse({'error': 'Invalid query or page'})
-
-    # Log the search query in the database
+    
     log_search(query)
 
     URL = f'https://api.unsplash.com/search/photos/?client_id={API_KEY}&query={query}&page={page}&per_page=29'
@@ -77,15 +88,23 @@ def search_results(request):
 
 # Function to get the popular searches
 def get_popular_searches(request):
-    limit = request.GET.get('limit', '5')
+    limit = request.GET.get('limit')
+
+    if not limit or limit == 'undefined':
+        limit = 10
+    else:
+        limit = int(limit)
+
     try:
-        client = connection_mongodb()
+        client = connection_mongodb('views.get_popular_searches')
         db = client['SearchArchive']
         collection = db['searches']
 
-        popular_searches = collection.find().sort('count', DESCENDING).limit(int(limit))
+        popular_searches = collection.find({}, {'query': 1, 'count': 1, '_id': 1}).sort('count', DESCENDING).limit(limit)
 
-        return list(popular_searches)
+        res = {'popular_searches': json.loads(json_util.dumps(list(popular_searches)))}
+
+        return JsonResponse(res, safe=False)
     except Exception as e:
         # Handle other general exceptions
         print(f'Error: {e}')
