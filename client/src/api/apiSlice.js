@@ -6,13 +6,17 @@ export const apiSlice = createApi({
     baseUrl: "http://localhost:8000/images",
   }),
   endpoints: (builder) => ({
+    // Get Image Search results.
     getImagesResults: builder.query({
-      query: (params) => `/api/v1/search/?query=${params.query}&page=${params.page}`,
+      query: (params) =>
+        `/api/v1/search/?query=${params.query}&page=${params.page}`,
     }),
+    // Get Popular Searches.
     getPopularSearches: builder.query({
       query: (limit) => `/api/v1/searches/popular/?limit=${limit}`,
     }),
   }),
 });
 
-export const { useGetImagesResultsQuery, useGetPopularSearchesQuery } = apiSlice;
+export const { useGetImagesResultsQuery, useGetPopularSearchesQuery } =
+  apiSlice;

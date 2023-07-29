@@ -3,19 +3,26 @@ import { Home } from "../pages/Home";
 import { About } from "../pages/About";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { Navigation } from "../components/Navigation/Navigation";
-import SearchResults from "../components/Search/SearchResults";
+import ImagesResults from "../components/Results/ImagesResults";
 
 function Router() {
   return (
     <BrowserRouter>
       <Navigation />
       <Routes>
+        {/* HomePage. */}
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home/*" element={<Home />}>
-          <Route path="" element={<SearchResults />} />
-          <Route path="results" element={<SearchResults />} />
+          {/* Default images results. */}
+          <Route path="" element={<ImagesResults />} />
+          {/* Searched images results. */}
+          <Route path="results" element={<ImagesResults />} />
         </Route>
+
+        {/* About page. */}
         <Route path="/about" element={<About />} />
+
+        {/* Page 404. */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
