@@ -8,6 +8,7 @@ import {
   IconButton,
   Autocomplete,
   TextField,
+  Box,
 } from "@mui/material";
 
 export function SearchForm() {
@@ -17,31 +18,8 @@ export function SearchForm() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setSearchesOptions([
-      { query: "1" },
-      { query: "2" },
-      { query: "3" },
-      { query: "3 3" },
-      { query: "3 " },
-      { query: " 3" },
-      { query: "3 2" },
-    ]);
-  }, []);
-
-  //  useEffect(() => {
-  //    fetch("/data/searches.json")
-  //      .then((response) => response.json())
-  //      .then((data) => setSearchesOptions(data.searches))
-  //      .catch((error) => console.error("Error:", error));
-  //  }, [ ]);
-
-  const handleChange = (e) => {
-    setSearchData(e.target.value);
-  };
-
   const handleSubmit = (e) => {
-    // prevent refresh page
+    // Prevent refresh page.
     e.preventDefault();
 
     if (searchData) {
@@ -52,12 +30,24 @@ export function SearchForm() {
     }
   };
 
-  // useEffect(() => {
-  //   if (popularSearchesData) {
-  //     const newOptions = popularSearchesData.popular_searches;
-  //     setOptions([...newOptions, ...options]);
-  //   }
-  // }, []);
+  useEffect(() => {
+    fetch("/data/searches.json")
+      .then((response) => response.json())
+      .then((data) => setSearchesOptions(data.searches))
+      .catch((error) => console.error("Error:", error));
+  }, []);
+
+  useEffect(() => {
+    if (popularSearchesData) {
+      const newOptions = popularSearchesData.popular_searches;
+      setSearchesOptions([...newOptions, ...searchesOptions]);
+
+      const filteredOptions = searchesOptions.filter(
+        (option) => !newOptions.find((o) => o.query === option.query)
+      );
+      setSearchesOptions([...newOptions, ...filteredOptions]);
+    }
+  }, [popularSearchesData]);
 
   return (
     <>
@@ -70,18 +60,25 @@ export function SearchForm() {
           alignItems: "center",
           width: "auto",
           m: "auto",
-          maxWidth: "550px",
-          border: "1px solid #373737",
-          borderRadius: "5px",
+          maxWidth: { xs: "100vw", md: "520px" },
+          outline: "1px solid #373737",
+          borderRadius: "100px",
         }}
       >
         <Autocomplete
           freeSolo
-          id="size-small-outlined"
+          id="auto-complete"
           size="small"
-          sx={{ flex: 1 }}
+          autoComplete
+          sx={{ flex: 1, display: "block" }}
           disableClearable
+          includeInputInList
           options={searchesOptions.map((option) => option.query)}
+          onInputChange={(e, newValue) => {
+            setSearchData(newValue);
+          }}
+          onSubmit={handleSubmit}
+          ListboxProps={{ style: { height: "100%", maxHeight: "100%" } }}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -90,8 +87,30 @@ export function SearchForm() {
                 ...params.InputProps,
                 type: "search",
                 "aria-label": "search",
+                style: {
+                  width: "auto",
+                  borderTopLeftRadius: "100px",
+                  borderBottomLeftRadius: "100px",
+                  paddingLeft: "12px",
+                },
               }}
-              onChange={handleChange}
+            />
+          )}
+          PaperComponent={(props) => (
+            <Paper
+              {...props}
+              sx={{
+                m: "auto",
+                marginTop: "3px",
+                width: { xs: "100vw", md: "auto" },
+                height: {
+                  xs: "calc(100vh - 51px)",
+                  sm: "calc(100vh - 55px)",
+                  md: "400px",
+                },
+                position: { xs: "absolute", md: "static" },
+                left: { xs: -58, sm: -66, md: "none" },
+              }}
             />
           )}
         />
@@ -99,7 +118,7 @@ export function SearchForm() {
         <IconButton
           onClick={handleSubmit}
           type="button"
-          sx={{ p: "5px", color: "#373737" }}
+          sx={{ p: "7px", mr: "6px", color: "#373737" }}
           aria-label="search"
         >
           <SearchIcon />
