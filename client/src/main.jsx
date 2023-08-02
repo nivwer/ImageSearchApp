@@ -2,10 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+import '@fontsource/im-fell-english';
+import '@fontsource/im-fell-english/400-italic.css';
 
 import "./styles/index.css";
 import { store } from "./app/store/rootReducer.jsx";
