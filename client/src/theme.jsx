@@ -6,8 +6,8 @@ const theme = createTheme({
     primary: {
       main: '#000000',
       contrastText: '#c4c4c4',
-      light: '#000000',
-      dark: '#000000',
+      light: '#121212',
+      dark: '#121212',
     },
     secondary: {
       main: '#101010',
@@ -18,12 +18,13 @@ const theme = createTheme({
     text: {
       primary: 'rgba(185,185,185,0.87)',
       secondary: 'rgba(154,154,154,0.54)',
-      disabled: 'rgba(80,80,80,0.38)',
+      disabled: 'rgba(100,100,100,0.38)',
       hint: 'rgba(88,88,88,0.38)',
     },
     background: {
       default: '#000000',
       paper: '#000000',
+      primary: '#060606'
     },
     error: {
       main: '#5a4543',
