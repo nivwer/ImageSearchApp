@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,6 +13,7 @@ import {
 } from "@mui/material";
 
 export function SearchForm() {
+  const theme = useTheme()
   const [searchData, setSearchData] = useState("");
   const [searchesOptions, setSearchesOptions] = useState([]);
   const popularSearchesData = useSelector((state) => state.popularSearchesData);
@@ -60,8 +62,8 @@ export function SearchForm() {
           alignItems: "center",
           width: "auto",
           m: "auto",
-          maxWidth: { xs: "100vw", md: "520px" },
-          outline: "1px solid #373737",
+          maxWidth: { xs: "100vw", md: "570px" },
+          outline: `1px solid ${theme.palette.text.disabled}`,
           borderRadius: "100px",
         }}
       >
@@ -91,7 +93,9 @@ export function SearchForm() {
                   width: "auto",
                   borderTopLeftRadius: "100px",
                   borderBottomLeftRadius: "100px",
-                  paddingLeft: "12px",
+                  paddingLeft: "20px",
+                  backgroundColor: theme.palette.background.primary,
+                  
                 },
               }}
             />
@@ -118,7 +122,7 @@ export function SearchForm() {
         <IconButton
           onClick={handleSubmit}
           type="button"
-          sx={{ p: "7px", mr: "6px", color: "#373737" }}
+          sx={{ p: "7px", mr: "12px", ml: "7px", color: theme.palette.text.primary }}
           aria-label="search"
         >
           <SearchIcon />
