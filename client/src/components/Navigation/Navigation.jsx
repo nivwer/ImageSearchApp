@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import SearchForm from "../../components/Search/SearchForm";
@@ -18,6 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 export function Navigation() {
+  const theme = useTheme();
   const [showNavLinks, setShowNavLinks] = useState(false);
   const [showSearch, setShowSearch] = useState("none");
 
@@ -28,9 +30,10 @@ export function Navigation() {
     setShowNavLinks(open);
   };
 
-  // const toggleSearch = (open) => {
-    
-  // }
+  const navLinks = [
+    { tittle: "Home", href: "/home" },
+    { tittle: "About", href: "/about" },
+  ];
 
   const NavLinks = () => (
     <Stack
@@ -41,12 +44,19 @@ export function Navigation() {
         paddingTop: { xs: "60px", md: "0" },
       }}
     >
-      <Button>
-        <NavLink to="/home">Home</NavLink>
-      </Button>
-      <Button>
-        <NavLink to="/about">About</NavLink>
-      </Button>
+      {navLinks.map((l, i) => (
+        <Button key={i} variant="contained" color="primary" sx={{borderRadius: "100px"}}>
+          <NavLink
+            style={{
+              textDecoration: "none",
+              color: theme.palette.text.primary,
+            }}
+            to={l.href}
+          >
+            {l.tittle}
+          </NavLink>
+        </Button>
+      ))}
     </Stack>
   );
 
@@ -54,16 +64,30 @@ export function Navigation() {
     <>
       {/* Navbar on all the pages. */}
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar component="nav" color="primary">
+        <AppBar sx={{ zIndex: 50 }} component="nav" color="primary">
           <Toolbar sx={{ m: { xs: "0", md: "0 5%" } }}>
             {/* Logotipo. */}
-            <Typography variant="h6" sx={{ ml: 1, flexGrow: {xs: 1, md: 0} }}>
-              <NavLink to="/">ISearch</NavLink>
+            <Typography variant="h5" sx={{ ml: 1, flexGrow: { xs: 1, md: 0 } }}>
+              <NavLink
+                style={{
+                  textDecoration: "none",
+                  color: theme.palette.text.primary,
+                }}
+                to="/"
+              >
+                ISearch
+              </NavLink>
             </Typography>
 
             {/* Search component. */}
             <>
-              <Box sx={{ m: "0 100px", flexGrow: 1, display: {xs: "none", md: "block"} }}>
+              <Box
+                sx={{
+                  m: "0 100px",
+                  flexGrow: 1,
+                  display: { xs: "none", md: "block" },
+                }}
+              >
                 {/* Laptop Screen. */}
                 <Box sx={{ flexGrow: 1 }}>
                   <SearchForm />
@@ -73,10 +97,12 @@ export function Navigation() {
               {/* Phone Screen. */}
               <Box sx={{ display: { xs: "block", md: "none" }, m: "auto 4px" }}>
                 <IconButton
-                onClick={() => {
-                  setShowSearch("block")
-                }} 
-                type="button" sx={{ p: "5px", color: "#c4c4c4" }}>
+                  onClick={() => {
+                    setShowSearch("block");
+                  }}
+                  type="button"
+                  sx={{ p: "5px", color: theme.palette.text.primary }}
+                >
                   <SearchIcon />
                 </IconButton>
               </Box>
@@ -96,7 +122,10 @@ export function Navigation() {
                   edge="start"
                   color="inherit"
                   aria-label="menu"
-                  sx={{ mr: { xs: 0, md: 2 }, color: "#c4c4c4" }}
+                  sx={{
+                    mr: { xs: 0, md: 2 },
+                    color: theme.palette.text.primary,
+                  }}
                 >
                   <MenuIcon />
                 </IconButton>
@@ -113,26 +142,25 @@ export function Navigation() {
             </>
           </Toolbar>
         </AppBar>
-        <AppBar component="nav" color="primary" sx={{display: {xs: showSearch, md: "none"}}}>
+        <AppBar
+          component="nav"
+          color="primary"
+          sx={{ display: { xs: showSearch, md: "none" } }}
+        >
           <Toolbar>
             <IconButton>
               <ArrowBackIosIcon
                 onClick={() => {
-                  setShowSearch("none")
+                  setShowSearch("none");
                 }}
                 type="button"
-                sx={{ p: "1px", color: "#c4c4c4" }}
+                sx={{ p: "1px", color: theme.palette.text.primary }}
               />
             </IconButton>
             <Box sx={{ flexGrow: 1 }}>
               <SearchForm />
             </Box>
           </Toolbar>
-        </AppBar>
-      </Box>
-      <Box>
-        <AppBar position="static">
-          <Toolbar></Toolbar>
         </AppBar>
       </Box>
     </>
