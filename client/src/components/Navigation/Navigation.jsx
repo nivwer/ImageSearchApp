@@ -1,28 +1,32 @@
+// Hooks.
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+// Components.
 import SearchForm from "../../components/Search/SearchForm";
+import { NavLink } from "react-router-dom";
 import {
   Box,
   AppBar,
   Toolbar,
   Button,
-  Container,
   Typography,
   IconButton,
-  Drawer,
   SwipeableDrawer,
   Stack,
 } from "@mui/material";
+// Icons.
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
+// Component.
 export function Navigation() {
   const theme = useTheme();
+  // For lower resolutions.
   const [showNavLinks, setShowNavLinks] = useState(false);
-  const [showSearch, setShowSearch] = useState("none");
+  const [showSearchBar, setShowSearchBar] = useState("none");
 
+  // Toggle for the Swipeable Drawer to show NavLinks in the lower resolutions.
   const toggleDrawer = (open) => (e) => {
     if (e && e.type === "keydown" && (e.key === "Tab" || e.key === "Shift")) {
       return;
@@ -30,11 +34,13 @@ export function Navigation() {
     setShowNavLinks(open);
   };
 
+  // NavLinks.
   const navLinks = [
     { tittle: "Home", href: "/home" },
     { tittle: "About", href: "/about" },
   ];
 
+  // Stack of NavLinks.
   const NavLinks = () => (
     <Stack
       direction={{ xs: "column", md: "row" }}
@@ -45,7 +51,12 @@ export function Navigation() {
       }}
     >
       {navLinks.map((l, i) => (
-        <Button key={i} variant="contained" color="primary" sx={{borderRadius: "100px"}}>
+        <Button
+          key={i}
+          variant="contained"
+          color="primary"
+          sx={{ borderRadius: "100px" }}
+        >
           <NavLink
             style={{
               textDecoration: "none",
@@ -81,6 +92,7 @@ export function Navigation() {
 
             {/* Search component. */}
             <>
+              {/* Laptop Screen. */}
               <Box
                 sx={{
                   m: "0 100px",
@@ -88,17 +100,15 @@ export function Navigation() {
                   display: { xs: "none", md: "block" },
                 }}
               >
-                {/* Laptop Screen. */}
-                <Box sx={{ flexGrow: 1 }}>
-                  <SearchForm />
-                </Box>
+                <SearchForm />
               </Box>
 
               {/* Phone Screen. */}
               <Box sx={{ display: { xs: "block", md: "none" }, m: "auto 4px" }}>
+                {/* When on Click in the button, show SearchBar. */}
                 <IconButton
                   onClick={() => {
-                    setShowSearch("block");
+                    setShowSearchBar("block");
                   }}
                   type="button"
                   sx={{ p: "5px", color: theme.palette.text.primary }}
@@ -116,6 +126,7 @@ export function Navigation() {
               </Box>
               {/* Phone Screen. */}
               <Box sx={{ display: { xs: "block", md: "none" } }}>
+                {/* When on Click in the button, show NavLinks. */}
                 <IconButton
                   onClick={toggleDrawer(true)}
                   size="large"
@@ -129,6 +140,7 @@ export function Navigation() {
                 >
                   <MenuIcon />
                 </IconButton>
+                {/* Swipeable Drawer to show NavLinks. */}
                 <SwipeableDrawer
                   sx={{ display: { xs: "block", md: "none" } }}
                   anchor="right"
@@ -142,21 +154,25 @@ export function Navigation() {
             </>
           </Toolbar>
         </AppBar>
+
+        {/* SearchBar. */}
         <AppBar
           component="nav"
           color="primary"
-          sx={{ display: { xs: showSearch, md: "none" } }}
+          sx={{ display: { xs: showSearchBar, md: "none" } }}
         >
           <Toolbar>
+            {/* When on Click in the button, hidden SearchBar. */}
             <IconButton>
               <ArrowBackIosIcon
                 onClick={() => {
-                  setShowSearch("none");
+                  setShowSearchBar("none");
                 }}
                 type="button"
                 sx={{ p: "1px", color: theme.palette.text.primary }}
               />
             </IconButton>
+            {/* SearchForm component. */}
             <Box sx={{ flexGrow: 1 }}>
               <SearchForm />
             </Box>
