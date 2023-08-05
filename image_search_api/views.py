@@ -1,11 +1,16 @@
+# Standard.
 import os
-import requests
-import json
-from django.http import JsonResponse
 from datetime import datetime
-from bson import json_util
-from pymongo import MongoClient, errors, DESCENDING
+# Virtualenv.
 from dotenv import load_dotenv
+# Django.
+from django.http import JsonResponse
+# MongoDB.
+from pymongo import MongoClient, errors, DESCENDING
+import json
+from bson import json_util
+# Others.
+import requests
 
 # Load the virtual environment.
 load_dotenv()
@@ -76,17 +81,13 @@ def search_results(request):
     # Environment variable for Unsplash API.
     API_KEY = os.getenv('API_KEY_UNSPLASH')
 
-    # Get parameters.
-    # Remove spaces.
+    # Get parameters and remote spaces.
     query = ' '.join(request.GET.get('query', '').split()).lower()
     page = request.GET.get('page', '')
 
     # If query or page is invalid.
     if not query or not page.isdigit():
         return JsonResponse({'error': 'Invalid query or page'})
-
-    # If query and page is valid, try to save the query in the SearchArchive database.
-    log_search(query)
 
     # URL Unsplash API.
     URL = f'https://api.unsplash.com/search/photos/?client_id={API_KEY}&query={query}&page={page}&per_page=29'
@@ -97,6 +98,10 @@ def search_results(request):
         res = requests.get(URL)
         res.raise_for_status()  # Raise an exception for HTTP errors.
         json_data = res.json()  # Converted to JSON response.
+
+        # If query and page is valid, try to save the query in the SearchArchive database.
+        if json_data and len(json_data) != 0:
+            log_search(query)
 
         # If response is seccessfully, return Images Data in the JSON response.
         return JsonResponse(json_data, safe=False)
