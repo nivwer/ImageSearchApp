@@ -4,9 +4,11 @@ from datetime import datetime
 # Virtualenv.
 from dotenv import load_dotenv
 # Django.
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseServerError
+# MongoDB connection.
+from utils.mongo_connection import MongoDBSingleton
 # MongoDB.
-from pymongo import MongoClient, errors, DESCENDING
+from pymongo import errors, DESCENDING
 import json
 from bson import json_util
 # Others.
@@ -15,32 +17,10 @@ import requests
 # Load the virtual environment.
 load_dotenv()
 
-
-# Connection to MongoDB.
-def connection_mongodb(origin):
-    # Environment variable for MongoDB databases.
-    MONGO_URI = os.getenv('MONGO_URI')
-    # Timestamp in the format: [day/month/year hour:minute:second].
-    dtn = datetime.now().strftime("[%d/%b/%Y %H:%M:%S]")
-
-    # Try to connect to the MongoDB databases.
-    try:
-        client = MongoClient(MONGO_URI)
-        # If the connection is seccessful.
-        print(f'{dtn} "MongoDB connection successful ({origin})"')
-        return client
-
-    except errors.ConnectionError as e:
-        # Handle MongoDB connection error.
-        print(f'{dtn} MongoDB connection error: {e}')
-
-    except errors.ServerSelectionTimeoutError as e:
-        # Handle MongoDB server selection timeout error.
-        print(f'{dtn} MongoDB server selection timeout error: {e}')
-
+# Helpers.
 
 # Function to log search queries in the SearchArchive database.
-def log_search(query):
+async def log_search(query):
     # If the query is invalid.
     if not query:
         return JsonResponse({'error': 'Invalid query'})
@@ -48,19 +28,20 @@ def log_search(query):
     # If the query is valid, try save the query in the searches collection.
     try:
         # Connection to MongoDB databases.
-        client = connection_mongodb('views.log_search')
+        mongo_connection = MongoDBSingleton()
+        client = mongo_connection.client
         db = client['SearchArchive']
         collection = db['searches']
 
         # Find the query.
-        result = collection.find_one({'query': query})
+        result = await collection.find_one({'query': query})
 
         if result:
             # If the query is found, count +1 ( Searches ).
-            collection.update_one(result, {'$inc': {'count': 1}})
+            await collection.update_one(result, {'$inc': {'count': 1}})
         else:
             # If the query is not found, log the query into the searches collection.
-            collection.insert_one({'query': query, 'count': 1})
+            await collection.insert_one({'query': query, 'count': 1})
 
         # If the logged is seccessfully, return this message.
         return JsonResponse({'message': 'Search query logged successfully'})
@@ -68,16 +49,18 @@ def log_search(query):
     except errors.WriteError as e:
         # Handle MongoDB write error.
         print(f'MongoDB write error: {e}')
+        return JsonResponse({'error': 'Failed to log search query'})
 
     except Exception as e:
         # Handle other general exceptions.
         print(f'Error: {e}')
+        return JsonResponse({'error': 'An unexpected error occurred'})
 
 
-# Create your views here.
+# Views.
 
 # Function for handling search queries and image search results from Unsplash API.
-def search_results(request):
+async def search_results(request):
     # Environment variable for Unsplash API.
     API_KEY = os.getenv('API_KEY_UNSPLASH')
 
@@ -101,7 +84,7 @@ def search_results(request):
 
         # If query and page is valid, try to save the query in the SearchArchive database.
         if json_data and len(json_data) != 0:
-            log_search(query)
+            await log_search(query)
 
         # If response is seccessfully, return Images Data in the JSON response.
         return JsonResponse(json_data, safe=False)
@@ -120,7 +103,7 @@ def search_results(request):
 
 
 # Function to get the popular searches.
-def get_popular_searches(request):
+async def get_popular_searches(request):
     # Get the limit parameter.
     limit = request.GET.get('limit')
 
@@ -133,17 +116,17 @@ def get_popular_searches(request):
     # Try to get the popular searches.
     try:
         # Connection to MongoDB databases.
-        client = connection_mongodb('views.get_popular_searches')
+        mongo_connection = MongoDBSingleton()
+        client = mongo_connection.client
         db = client['SearchArchive']
         collection = db['searches']
 
         # Find the queries ( Popular searches ) in descending order.
-        popular_searches = collection.find(
+        popular_searches = await collection.find(
             {}, {'query': 1, 'count': 1, '_id': 1}).sort('count', DESCENDING).limit(limit)
 
         # Convert the BSON response to a JSON response.
-        res = {'popular_searches': json.loads(
-            json_util.dumps(list(popular_searches)))}
+        res = {'popular_searches': json.loads(json_util.dumps(list(popular_searches)))}
 
         # If response is seccessfully, return the Popular Searches in a JSON response.
         return JsonResponse(res, safe=False)
@@ -151,3 +134,4 @@ def get_popular_searches(request):
     except Exception as e:
         # Handle other general exceptions.
         print(f'Error: {e}')
+        return HttpResponseServerError("An error occurred while processing the request.")
