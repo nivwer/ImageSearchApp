@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'my_django_api.middleware.mongo_middleware.MongoDBMiddleware', # MongoDB connection.
 ]
 
 ROOT_URLCONF = 'my_django_api.urls'
