@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ImageSearchApiConfig(AppConfig):
+class SearchApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'image_search_api'
+    name = 'apps.search_api'
