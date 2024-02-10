@@ -23,7 +23,7 @@ class ImageListByKeywordAPIView(APIView):
 
         keyword: str = request.GET.get("keyword")
         page: int = int(request.GET.get("page", "1"))
-        per_page: int = int(request.GET.get("per_page", "1"))
+        per_page: int = int(request.GET.get("per_page", "10"))
 
         try:
             if not keyword:
