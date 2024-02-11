@@ -3,7 +3,7 @@ import { IImage } from "@/interfaces/IImage";
 
 async function loadImages(query: string, page: string) {
   const BACKEND_URL = "http://localhost:8000";
-  const params: string = `?keyword=${query}&page=${page}&per_page=5`;
+  const params: string = `?keyword=${query}&page=${page}&per_page=30`;
 
   const res = await fetch(`${BACKEND_URL}/search/api/v1/images/${params}`);
   const data = await res.json();
@@ -27,11 +27,13 @@ async function ResultsPage({ searchParams }: IProps) {
   const images = await loadImages(query, page);
 
   return (
-    <>
-      {images.results.map((image: IImage) => (
-        <ImageCard image={image} />
-      ))}
-    </>
+    <div className="container max-w-4xl mx-auto p-0 py-4 sm:p-4">
+      <div className="-m-1 flex flex-wrap md:-m-2">
+        {images.results.map((image: IImage) => (
+          <ImageCard key={image.id} image={image} />
+        ))}
+      </div>
+    </div>
   );
 }
 
