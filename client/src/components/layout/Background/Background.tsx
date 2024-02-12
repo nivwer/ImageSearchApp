@@ -1,11 +1,16 @@
-function Background() {
-    return (
+interface IProps {
+  className?: string;
+}
+
+function Background({ className }: IProps) {
+  return (
+    <div className={`h-screen w-screen bg-zinc-800 fixed -z-50 ${className}`}>
       <div
-        className=" bg-cover bg-bottom h-screen w-screen fixed blur-md -z-50"
+        className={`h-full w-full bg-cover bg-bottom fixed blur-md`}
         style={{ backgroundImage: "url('/denny-muller-Qxb2Fh6Aqpg-unsplash.jpg')" }}
       />
-    );
-  }
-  
-  export default Background;
-  
+    </div>
+  );
+}
+
+export default Background;
