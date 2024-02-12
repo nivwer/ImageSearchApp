@@ -2,6 +2,7 @@ import ImageCard from "@/components/ImageCard/ImageCard";
 import { IImage } from "@/interfaces/IImage";
 import CustomPagination from "@/components/CustomPagination/CustomPagination";
 import Divider from "@/components/Divider/Divider";
+import ImageCardGroup from "@/components/ImageCardGroup/ImageCardGroup";
 
 async function loadImages(query: string, page: string) {
   const BACKEND_URL = "http://localhost:8000";
@@ -10,7 +11,7 @@ async function loadImages(query: string, page: string) {
   const res = await fetch(`${BACKEND_URL}/search/api/v1/images/${params}`);
   const data = await res.json();
 
-    // await new Promise((resolve) => setTimeout(resolve, 7000));
+  // await new Promise((resolve) => setTimeout(resolve, 7000));
 
   return data;
 }
@@ -33,13 +34,7 @@ async function ResultsPage({ searchParams }: IProps) {
   return (
     <>
       <Divider children={query} />
-      {images && images.results && (
-        <div className="-m-1 flex flex-wrap md:-m-2">
-          {images.results.map((image: IImage) => (
-            <ImageCard key={image.id} image={image} />
-          ))}
-        </div>
-      )}
+      {images && images.results && <ImageCardGroup images={images.results} />}
       <Divider children={query} />
       {images && images.total_pages && (
         <CustomPagination
