@@ -39,7 +39,9 @@ function CustomPagination({ url, page, total_pages }: IProps) {
 
         {/* Current */}
         <PaginationItem>
-          <PaginationLink isActive href={`${url}&page=${page}`}>{page}</PaginationLink>
+          <PaginationLink isActive href={`${url}&page=${page}`}>
+            {page}
+          </PaginationLink>
         </PaginationItem>
 
         {page === 1 && (
