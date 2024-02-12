@@ -10,7 +10,7 @@ import { GiHastyGrave } from "react-icons/gi";
 
 function Header() {
   return (
-    <Card className="w-full p-2 sm:p-8 ">
+    <Card className="w-full p-2 sm:p-8 bg-white/20 border-none shadow-none">
       <CardHeader>
         <CardTitle className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           <div className="flex justify-between">
