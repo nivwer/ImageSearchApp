@@ -1,6 +1,7 @@
-import ImageCard from "@/components/cards/ImageCard/ImageCard";
+import ImageCard from "@/components/ImageCard/ImageCard";
 import { IImage } from "@/interfaces/IImage";
-import CustomPagination from "@/components/pagination/CustomPagination/CustomPagination";
+import CustomPagination from "@/components/CustomPagination/CustomPagination";
+import Divider from "@/components/Divider/Divider";
 
 async function loadImages(query: string, page: string) {
   const BACKEND_URL = "http://localhost:8000";
@@ -9,7 +10,7 @@ async function loadImages(query: string, page: string) {
   const res = await fetch(`${BACKEND_URL}/search/api/v1/images/${params}`);
   const data = await res.json();
 
-  //   await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 7000));
 
   return data;
 }
@@ -30,7 +31,8 @@ async function ResultsPage({ searchParams }: IProps) {
   const url = `/results?query=${query}`;
 
   return (
-    <div className="container max-w-4xl mx-auto p-2 py-4 sm:p-4">
+    <>
+      <Divider children={query} />
       {images && images.results && (
         <div className="-m-1 flex flex-wrap md:-m-2">
           {images.results.map((image: IImage) => (
@@ -38,6 +40,7 @@ async function ResultsPage({ searchParams }: IProps) {
           ))}
         </div>
       )}
+      <Divider children={query} />
       {images && images.total_pages && (
         <CustomPagination
           url={url}
@@ -45,7 +48,7 @@ async function ResultsPage({ searchParams }: IProps) {
           total_pages={images.total_pages}
         />
       )}
-    </div>
+    </>
   );
 }
 
