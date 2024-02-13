@@ -1,4 +1,9 @@
 import Divider from "@/components/Divider/Divider";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About / Image Search",
+};
 
 function page() {
   return (

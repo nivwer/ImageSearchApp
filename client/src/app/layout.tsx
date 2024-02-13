@@ -16,6 +16,9 @@ const font = Cinzel({
 export const metadata: Metadata = {
   title: "Image Search",
   description: "Image Search is an application for searching images.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default async function RootLayout({

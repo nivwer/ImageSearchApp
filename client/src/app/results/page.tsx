@@ -2,6 +2,27 @@ import CustomPagination from "@/components/CustomPagination/CustomPagination";
 import Divider from "@/components/Divider/Divider";
 import ImageCardGroup from "@/components/ImageCardGroup/ImageCardGroup";
 import { GiChewedSkull } from "react-icons/gi";
+import type { Metadata, ResolvingMetadata } from "next";
+
+interface ISearchParams {
+  query: string;
+  page: string;
+}
+
+interface IProps {
+  searchParams: ISearchParams;
+}
+
+export async function generateMetadata(
+  { searchParams }: IProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const query = searchParams.query;
+
+  return {
+    title: `${query} - Image Search`,
+  };
+}
 
 async function loadImages(query: string, page: string) {
   const BACKEND_URL = process.env.BACKEND_URL;
@@ -13,15 +34,6 @@ async function loadImages(query: string, page: string) {
   // await new Promise((resolve) => setTimeout(resolve, 7000));
 
   return data;
-}
-
-interface ISearchParams {
-  query: string;
-  page: string;
-}
-
-interface IProps {
-  searchParams: ISearchParams;
 }
 
 async function ResultsPage({ searchParams }: IProps) {

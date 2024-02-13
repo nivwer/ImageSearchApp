@@ -18,13 +18,8 @@ function SearchForm() {
 
   useEffect(() => {
     const queryParam: string | null = searchParams.get("query");
-    if (queryParam) {
-      setQuery(queryParam);
-      document.title = `${queryParam} - Image Search`;
-    } else {
-      setQuery("");
-      document.title = `Image Search`;
-    }
+    if (queryParam) setQuery(queryParam);
+    else setQuery("");
   }, [searchParams]);
 
   return (
