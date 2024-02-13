@@ -10,7 +10,7 @@ function Loader() {
   const [isStartingServer, setIsStartingServer] = useState<boolean>(false);
 
   useEffect(() => {
-    const BACKEND_URL = "http://localhost:8000";
+    const BACKEND_URL =process.env.NEXT_PUBLIC_BACKEND_URL;
 
     const checkServerStatusWithRetry = async () => {
       try {
