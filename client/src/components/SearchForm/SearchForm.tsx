@@ -19,7 +19,8 @@ function SearchForm() {
   useEffect(() => {
     const queryParam: string | null = searchParams.get("query");
     if (queryParam) setQuery(queryParam);
-  }, []);
+    else setQuery("");
+  }, [searchParams]);
 
   return (
     <form onSubmit={handleOnSubmit}>
@@ -29,13 +30,13 @@ function SearchForm() {
           placeholder="Search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="border-r-0 h-12 text-md px-6 bg-white/15 border-white/15"
+          className="border-r-0 h-12 text-md px-6 bg-white/15 border-white/0"
         />
         <Button
           type="submit"
           variant="outline"
           size="icon"
-          className="h-12 text-xl border-l-0 w-24  bg-white/15 border-white/15 hover:bg-white/30"
+          className="h-12 text-xl border-l-0 w-24  bg-white/15 border-white/0 hover:bg-white/30"
           children={<BiSearchAlt2 />}
         />
       </div>
