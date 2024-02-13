@@ -4,4 +4,7 @@ export interface IImage {
     regular: string;
     small: string;
   };
+  links: {
+    html: string;
+  }
 }
