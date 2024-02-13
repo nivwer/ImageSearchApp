@@ -34,10 +34,13 @@ export default async function RootLayout({
         >
           <Loader />
           <Background />
-          <div className="container max-w-4xl mx-auto p-2 sm:p-4">
-            <Navbar />
-            <Header />
-            {children}
+          <div className="container max-w-4xl mx-auto p-2 sm:p-4 sm:pb-14 min-h-screen flex flex-col justify-between">
+            <div>
+              <Navbar />
+              <Header />
+              {children}
+            </div>
+
             <Footer />
           </div>
         </ThemeProvider>
