@@ -1,27 +1,17 @@
 import SearchForm from "@/components/SearchForm/SearchForm";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { GiHastyGrave } from "react-icons/gi";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 function Header() {
   return (
-    <Card className="w-full p-2 sm:p-8 bg-white/20 border-none shadow-none">
+    <Card className="w-full p-2 sm:p-8 bg-white/15 border-none shadow-none">
       <CardHeader>
         <CardTitle className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          <div className="flex justify-between">
-            Search <GiHastyGrave />
-          </div>
+          Search
         </CardTitle>
       </CardHeader>
       <CardContent>
         <SearchForm />
       </CardContent>
-      <CardFooter></CardFooter>
     </Card>
   );
 }
