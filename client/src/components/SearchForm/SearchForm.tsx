@@ -37,8 +37,9 @@ function SearchForm() {
           variant="outline"
           size="icon"
           className="h-12 text-xl border-l-0 w-24  bg-white/15 border-white/0 hover:bg-white/30"
-          children={<BiSearchAlt2 />}
-        />
+        >
+          <BiSearchAlt2 />
+        </Button>
       </div>
     </form>
   );

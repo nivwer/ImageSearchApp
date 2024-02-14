@@ -3,7 +3,9 @@ import Spinner from "@/components/Spinner/Spinner";
 
 function LoadingPage() {
   return (
-    <Divider children={<Spinner />}/>
+    <Divider>
+      <Spinner />
+    </Divider>
   );
 }
 

@@ -10,13 +10,19 @@ function Navbar() {
       rightSide={
         <div className="flex gap-4 text-lg">
           <a href={process.env.GITHUB_LINK} target="_blank">
-            <ButtonIcon children={<FaGithub />} />
+            <ButtonIcon>
+              <FaGithub />
+            </ButtonIcon>
           </a>
           <a href={process.env.TWITTER_LINK} target="_blank">
-            <ButtonIcon children={<FaTwitter />} />
+            <ButtonIcon>
+              <FaTwitter />
+            </ButtonIcon>
           </a>
           <a href={process.env.DISCORD_LINK} target="_blank">
-            <ButtonIcon children={<FaDiscord />} />
+            <ButtonIcon>
+              <FaDiscord />
+            </ButtonIcon>
           </a>
         </div>
       }

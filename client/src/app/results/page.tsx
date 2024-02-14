@@ -46,11 +46,11 @@ async function ResultsPage({ searchParams }: IProps) {
     <>
       {images && (
         <>
-          <Divider children={images.total > 0 ? query : "not found"} />
+          <Divider>{images.total > 0 ? query : "not found"} </Divider>
           {images.total > 0 && <ImageCardGroup images={images.results} />}
           {images.total_pages > 0 && images.total > 0 && (
             <>
-              <Divider children={query} />
+              <Divider>{query}</Divider>
               <CustomPagination
                 url={url}
                 page={parseInt(page)}
