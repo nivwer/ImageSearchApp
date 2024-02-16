@@ -1,5 +1,6 @@
 import SearchForm from "@/components/SearchForm/SearchForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Suspense } from "react";
 
 function Header() {
   return (
@@ -10,7 +11,9 @@ function Header() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <SearchForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchForm />
+        </Suspense>
       </CardContent>
     </Card>
   );
