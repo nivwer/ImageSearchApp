@@ -53,9 +53,6 @@ cd client
 
 # Development
 npm run dev
-
-# Production
-npm run build
 ```
 
 The client will be available at `http://localhost:3000`.
