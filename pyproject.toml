@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "imagesearchapp"
 version = "0.1.0"
-description = ""
+description = "Image Search is an application for searching images."
 authors = ["nivwer"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
