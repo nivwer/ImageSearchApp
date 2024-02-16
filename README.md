@@ -15,7 +15,7 @@ poetry install
 # Django initial setup
 python manage.py collectstatic --no-input
 
-# Install NextJS dependencies
+# Install Next.js dependencies
 cd client
 npm install
 
